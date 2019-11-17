@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Face recognition idol</title>
+
+</head>
+<body>
+
+        <form action="process_upload.php" method="post" enctype="multipart/form-data" target="iframe_upload">
+            <div>
+                <label>Choose File:</label>
+                <input name="file_upload" type="file">
+            </div>
+            <div><input type="submit" name="submitBtn" value="Upload"></div>
+        </form>
+        
+        <iframe class="hidden" name="iframe_upload" src="about:blank" style="width:0; height:0;"></iframe>
+
+</body>
+</html>
