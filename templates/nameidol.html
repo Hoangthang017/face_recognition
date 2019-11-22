@@ -38,18 +38,13 @@
 	<h1>NHẬN DIỆN NGƯỜI NỔI TIẾNG</h1>
 
 	<div class="w3layoutscontaineragileits">
-	<h2>Tải ảnh của bạn</h2>
-		<form action = "/name" method="POST" runat="server"  enctype="multipart/form-data">
-			<script src="../static/js/jquery.min.js"></script>
+	<h2>Gương mặt của :</h2>
+		<form  >
 			
-			<input  type='file' name="image" id="imgInp" />
-			<img id="blah" src="#" alt=" " />
+           {% for i in name %}
+			<li>{{i}}</li>
 			
-			
-			<div class="aitssendbuttonw3ls">
-				<input type="submit" value="Nhận diện">
-				
-			</div>
+			{%endfor%}
 		</form>
 
 	
