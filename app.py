@@ -1,20 +1,16 @@
-from flask import Flask, render_template, Response,url_for, jsonify, request, redirect,json,flash,session
-import face
+from flask import Flask, render_template, Response,url_for, jsonify, request, redirect, json,flash, session
 import os
-import cv2
-
+import face_retrieval
 from werkzeug.utils import secure_filename
 
-
-
 app = Flask(__name__)
+curr_dir = os.path.dirname(os.path.realpath(__file__))
+UPLOAD_FOLDER = os.path.join(*[curr_dir, 'static', 'images', 'upload'])
 
-UPLOAD_FOLDER = 'C:\\Users\\WIND\\OneDrive\\Project\\vn_celeb_face_recognition\\FaceRecognitionIdol\\static\\images\\images_update'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "super secret key"
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -22,33 +18,25 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    """Video streaming home page."""
     return render_template('index.html')
 
 
 @app.route('/name', methods=['GET', 'POST'])
 def upload_image():
-    #file=request.files['image']
-    #file=request.files.get('file')
-    file = request.files['image']
-    filename = secure_filename(file.filename)
+    file_list = []
     if request.method == 'POST':
-   
-        fileIMG=os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(fileIMG)
-        faceName = face.detect_faces_in_image(fileIMG)
-        os.remove(fileIMG)
-            
-        return render_template("nameidol.html",name=faceName)
-    
-
+        file = request.files['image']
+        if file.filename == '':
+            return redirect('/')
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print('path', os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file_list = face_retrieval.retrieveFaces(query_img=os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print('result', file_list)
+    return render_template('nameidol.html', file_list=file_list)
 
     #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-
-
-
 if __name__ == '__main__':
-
-    app.run(debug=1)
+    app.run(debug=1, threaded=False)
     

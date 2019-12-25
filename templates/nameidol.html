@@ -33,26 +33,22 @@
 
 <!-- Body -->
 <body>
-	
-
-	<h1>NHẬN DIỆN NGƯỜI NỔI TIẾNG</h1>
+	<h1>TRUY VẤN NGƯỜI NỔI TIẾNG</h1>
 
 	<div class="w3layoutscontaineragileits">
-	<h2>Gương mặt của :</h2>
-		<form  >
-			
-           {% for i in name %}
-			<li>{{i}}</li>
-			
-			{%endfor%}
-		</form>
-
-	
+		<h2>Kết quả:</h2>
+		<div class="result-container">
+			{% for image in file_list %}
+			<img src="../static/images/faces/{{ image }}" alt="">
+			{% endfor %}
+		</div>
+		<div class="aitssendbuttonw3ls">
+			<button onclick="window.location = '/'">Quay lại</button>
+		</div>
 	</div>
-
 	
 	<div class="w3footeragile">
-		<p>Trường Đại Học Công Nghệ Thông Tin - Khoa Học Máy Tính<a href="cs.uit.edu.vn"_blank"> KHMT 2016</a></p>
+		<p>Trường Đại Học Công Nghệ Thông Tin - Khoa Học Máy Tính<a href="cs.uit.edu.vn"_blank">KHMT 2016</a></p>
 	</div>
 
 	
