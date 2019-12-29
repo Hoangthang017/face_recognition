@@ -30,9 +30,7 @@ def upload_image():
             return redirect('/')
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        print('path', os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        file_list = face_retrieval.retrieveFaces(query_img=os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        print('result', file_list)
+        file_list = face_retrieval.retrieveFaces(query_img=os.path.join(app.config['UPLOAD_FOLDER'], filename), data_dir='embeded_face_train_resnet50.pickle')
     return render_template('nameidol.html', file_list=file_list)
 
     #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
