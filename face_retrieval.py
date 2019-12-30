@@ -16,6 +16,12 @@ from scipy.spatial.distance import cosine
 from keras.models import Sequential
 from keras.layers import Flatten
 from keras import Model
+import vptree
+def cosine_similarity(p1, p2):
+    return cosine(p1, p2)
+# pickle_in_dic = open('embeded_face_train_resnet50_vptree.pickle', 'rb')
+# dic = pickle.load(pickle_in_dic)
+# pickle_in_dic.close()
 detector = MTCNN()
 model = VGGFace(model='resnet50', include_top=False, input_shape=(224, 224, 3))
 graph = tf.get_default_graph()
@@ -90,3 +96,8 @@ def retrieveFaces(query_img, data_dir='embeded_face.pickle'):
         if is_match(query_embedding, embeddings[i][0], 0.3) is True:
             retrieval_result.append(embeddings[i][1])
     return retrieval_result
+
+def retreive_top_k(query_img, k=1):
+    query_embedding = get_embeddings([query_img], need_to_extract=True)
+    query_embedding = query_embedding[0]
+    return dic['tree'].get_n_nearest_neighbors(query_embedding, k)

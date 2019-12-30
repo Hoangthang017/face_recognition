@@ -38,9 +38,11 @@
 	<div class="w3layoutscontaineragileits">
 		<h2>Kết quả:</h2>
 		<div class="result-container">
-			{% for image in file_list %}
-			<img src="../static/images/faces/{{ image }}" alt="">
-			{% endfor %}
+			<ol class="ol-images">
+				{% for image in file_list %}
+				<li><img src="../static/images/faces/{{ image }}" alt=""></li>
+				{% endfor %}
+			</ol>
 		</div>
 		<div class="aitssendbuttonw3ls">
 			<button onclick="window.location = '/'">Quay lại</button>

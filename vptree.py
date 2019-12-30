@@ -22,7 +22,7 @@ class VPTree:
         Minimum number of points in leaves (IGNORED).
     """
 
-    def __init__(self, points, dist_fn):
+    def __init__(self, points, dist_fn, index_points):
         self.left = None
         self.right = None
         self.left_min = np.inf
@@ -30,13 +30,14 @@ class VPTree:
         self.right_min = np.inf
         self.right_max = 0
         self.dist_fn = dist_fn
-
+        self.index_points = index_points
         if not len(points):
             raise ValueError('Points can not be empty.')
 
         # Vantage point is point furthest from parent vp.
         vp_i = 0
         self.vp = points[vp_i]
+        self.index = self.index_points[0]
         points = np.delete(points, vp_i, axis=0)
 
         if len(points) == 0:
@@ -48,27 +49,35 @@ class VPTree:
 
         left_points = []
         right_points = []
+        index_right_points = []
+        index_left_points = []
+        i = 1
         for point, distance in zip(points, distances):
             if distance >= median:
                 self.right_min = min(distance, self.right_min)
                 if distance > self.right_max:
                     self.right_max = distance
                     right_points.insert(0, point) # put furthest first
+                    index_right_points.insert(0, self.index_points[i])
                 else:
                     right_points.append(point)
+                    index_right_points.append(self.index_points[i])
             else:
                 self.left_min = min(distance, self.left_min)
                 if distance > self.left_max:
                     self.left_max = distance
                     left_points.insert(0, point) # put furthest first
+                    index_left_points.insert(0, self.index_points[i])
                 else:
                     left_points.append(point)
+                    index_left_points.append(self.index_points[i])
+            i += 1
 
         if len(left_points) > 0:
-            self.left = VPTree(points=left_points, dist_fn=self.dist_fn)
+            self.left = VPTree(points=left_points, dist_fn=self.dist_fn, index_points=index_left_points)
 
         if len(right_points) > 0:
-            self.right = VPTree(points=right_points, dist_fn=self.dist_fn)
+            self.right = VPTree(points=right_points, dist_fn=self.dist_fn, index_points=index_right_points)
 
     def _is_leaf(self):
         return (self.left is None) and (self.right is None)
@@ -117,8 +126,8 @@ class VPTree:
 
             d = self.dist_fn(query, node.vp)
             if d < furthest_d:
-                neighbors.append((d, node.vp))
-                furthest_d, _ = neighbors[-1]
+                neighbors.append((d, node.vp, node.index))
+                furthest_d, _, _ = neighbors[-1]
 
             if node._is_leaf():
                 continue
@@ -219,4 +228,3 @@ class _AutoSortingList(list):
         self.sort()
         if self.max_size is not None and len(self) > self.max_size:
             self.pop()
-
