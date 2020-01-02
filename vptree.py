@@ -2,6 +2,7 @@
 import numpy as np
 
 
+from scipy.spatial.distance import cosine
 class VPTree:
 
     """ VP-Tree data structure for efficient nearest neighbor search.
@@ -21,7 +22,7 @@ class VPTree:
     leaf_size : int
         Minimum number of points in leaves (IGNORED).
     """
-
+    # thêm tham số index_points để nó truyền thông tin về index của mảng vector sẽ ứng với ảnh nào
     def __init__(self, points, dist_fn, index_points):
         self.left = None
         self.right = None
@@ -197,7 +198,6 @@ class VPTree:
                                        else d - node.right_max))
 
         return neighbors
-
 
 class _AutoSortingList(list):
 
