@@ -8,10 +8,12 @@ from scipy.spatial.distance import cosine
 
 def cosine_similarity(p1, p2):
     return cosine(p1, p2)
+#load file trích xuất đặc trưng đã lưu bằng pickle
 pickle_in_dic = open('embeded_face_train_resnet50_vptree_new.pickle', 'rb')
 dic = pickle.load(pickle_in_dic)
 pickle_in_dic.close()
 
+#config chạy trên flask
 app = Flask(__name__)
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 UPLOAD_FOLDER = os.path.join(*[curr_dir, 'static', 'images', 'upload'])
@@ -21,14 +23,17 @@ app.secret_key = "super secret key"
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
+#cho phép các tệp jpg jpeg png
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#Giao diện ban đầu gọi index.html
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
 
+#upload file
 @app.route('/name', methods=['GET', 'POST'])
 def upload_image():
     file_list = []
@@ -54,6 +59,7 @@ def upload_image():
 
     return render_template('nameidol.html', file_list=file_list)
 
+#chay app
 if __name__ == '__main__':
     app.run(debug=1, threaded=False)
     
